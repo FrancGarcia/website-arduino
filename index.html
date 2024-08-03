@@ -1,0 +1,20 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Communicating Between a Webpage and an Arduino</title>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.1/socket.io.js"></script> <!-- Updated version -->
+    </head>
+    <body>
+        <h1>Communicating Between a Webpage and an Arduino</h1>
+        <div id="sample"></div>
+        <script>
+            var socket = io('http://127.0.0.1:3000'); // Use the correct port here
+
+            // Listen for the 'data' event
+            socket.on('data', (data) => {
+                console.log(data);
+                document.getElementById('sample').innerHTML = data;
+            });
+        </script>
+    </body>
+</html>
