@@ -1,9 +1,9 @@
-<!doctype html>
+<!-- <!doctype html>
 <html>
     <head>
         <title>Communicating Between a Webpage and an Arduino</title>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.1/socket.io.js"></script> <!-- Updated version -->
-    
+<!--     
         <style>
 
             #sample {
@@ -27,4 +27,70 @@
             });
         </script>
     </body>
+</html> -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Communicating Between a Webpage and an Arduino</title>
+    <!-- Leaflet CSS and JS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <!-- Socket.io -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.1/socket.io.js"></script>
+    <!-- Styles -->
+    <style>
+        html, body {width: 100%; height: 100%; margin: 0; padding: 0;}
+        #map {position:absolute; top:0; bottom:0; right:0; left:0;}
+        #sample {width:300px; height: 300px; background-color: red;}
+    </style>
+</head>
+<body>
+    <h1>Communicating Between a Webpage and an Arduino</h1>
+    <div id="sample"></div>
+    <div id="map"></div> <!-- Map container -->
+
+    <script>
+        // Initialize the Leaflet map
+        var map = L.map('map', {
+            center: [32.88195184526258, -117.23350219670715],
+            zoom: 15,
+            zoomControl: true
+        });
+
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // Socket.io connection
+        var socket = io('http://127.0.0.1:3000');
+
+        // Marker cache
+        var markers = [];
+
+        // Listen for the 'data' event
+        socket.on('data', (data) => {
+            console.log(data);
+            // Update the sample div's opacity
+            document.getElementById('sample').style.opacity = data.opacity || 1;
+
+            // Parse the received data assuming it includes latitude, longitude, and other attributes
+            var lat = data;
+            var lng = data;
+            var content = `<b>Data:</b><br>Lat: ${lat}<br>Lng: ${lng}`;
+
+            // Remove old markers
+            // markers.forEach(marker => map.removeLayer(marker));
+            // markers = [];
+
+            // Add a new marker
+            var marker = L.marker([lat, lng]).addTo(map);
+            marker.bindPopup(content).openPopup();
+
+            // Store the marker in the cache
+            // markers.push(marker);
+        });
+    </script>
+</body>
 </html>
+

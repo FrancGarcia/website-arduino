@@ -34,6 +34,7 @@ const io = socketIo(app, {
     }
 });
 
+// Connect the client to the server
 io.on('connection', (socket) => {
     console.log('Client connected');
     socket.on('disconnect', () => {
